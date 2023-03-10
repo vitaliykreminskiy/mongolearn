@@ -1,19 +1,19 @@
 import { MongoClient, Db } from 'mongodb'
 
-class DB {
-  private static instance: DB
+class Database {
+  private static instance: Database
   private client!: MongoClient
   public db!: Db
 
   private constructor() {}
 
-  public static getInstance(): DB {
-    if (!DB.instance) {
-      DB.instance = new DB()
-      DB.instance.connect()
+  public static getInstance(): Database {
+    if (!Database.instance) {
+      Database.instance = new Database()
+      Database.instance.connect()
     }
 
-    return DB.instance
+    return Database.instance
   }
 
   private async connect() {
@@ -36,4 +36,4 @@ class DB {
   }
 }
 
-export default DB.getInstance()
+export default Database.getInstance()

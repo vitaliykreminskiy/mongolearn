@@ -1,13 +1,26 @@
 import Express, { Request } from 'express'
-import DB from '../classes/DB'
-
+import Database from '../classes/Database'
 export const CuisinesRouter = Express.Router()
 
-CuisinesRouter.get(
-  '/',
-  async (req: Request<{}, {}, {}, { cuisine: string }>, res) => {
-    const collections = await DB.db.listCollections().toArray()
+type Cuisine = {
+  title: string
+  description: string
+}
 
-    res.json(collections.map((collection) => collection.name))
-  }
-)
+const COLLECTION = 'cuisines'
+
+CuisinesRouter.get('/', async (req, res) => {
+  const collection = Database.db.collection(COLLECTION)
+
+  const cuisines = await collection.find().toArray()
+
+  res.json(cuisines)
+})
+
+CuisinesRouter.post('/', async (req: Request<{}, {}, Cuisine>, res) => {
+  const collection = Database.db.collection(COLLECTION)
+
+  await collection.insertOne(req.body)
+
+  res.send()
+})
