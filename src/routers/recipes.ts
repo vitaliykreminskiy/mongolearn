@@ -1,4 +1,6 @@
 import Express, { Request } from 'express'
+import { ObjectId } from 'mongodb'
+
 import Database from '../classes/Database'
 
 enum Units {
@@ -36,12 +38,8 @@ export const RecipesRouter = Express.Router()
 RecipesRouter.post('/', (req: Request<{}, {}, Recipe>, res) => {
   Database.db
     .collection(COLLECTION)
-    .insertOne(req.body)
-    .then((result) => {
-      console.log(result)
-
-      return res.send()
-    })
+    .insertOne({ ...req.body, cuisineId: new ObjectId(req.body.cuisineId) })
+    .then((_) => res.send())
 })
 
 RecipesRouter.get('/', async (req, res) => {
